@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { ArrowLeft, Building2, User, Plus, X } from "lucide-react"
@@ -78,6 +76,7 @@ export default function ConfigureSettings({ onBack, onNext }) {
     <div className="max-w-4xl mx-auto">
       <StepIndicator currentStep={2} />
 
+      {/* Intro */}
       <div className="text-center mb-8">
         <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">Automate Your Document Processing</h2>
         <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
@@ -86,7 +85,9 @@ export default function ConfigureSettings({ onBack, onNext }) {
         </p>
       </div>
 
+      {/* Progress icons */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        {/* Upload step */}
         <motion.div
           className="text-center opacity-50"
           initial={{ opacity: 0, y: 20 }}
@@ -94,7 +95,7 @@ export default function ConfigureSettings({ onBack, onNext }) {
           transition={{ delay: 0.1 }}
         >
           <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-            <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}>
+            <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2, repeat: Infinity }}>
               ✓
             </motion.div>
           </div>
@@ -102,6 +103,7 @@ export default function ConfigureSettings({ onBack, onNext }) {
           <p className="text-sm text-muted-foreground">Files uploaded successfully</p>
         </motion.div>
 
+        {/* Configure step */}
         <motion.div
           className="text-center"
           initial={{ opacity: 0, y: 20 }}
@@ -115,6 +117,7 @@ export default function ConfigureSettings({ onBack, onNext }) {
           <p className="text-sm text-muted-foreground">Select bank template and enter client information</p>
         </motion.div>
 
+        {/* Review step */}
         <motion.div
           className="text-center opacity-50"
           initial={{ opacity: 0, y: 20 }}
@@ -129,7 +132,9 @@ export default function ConfigureSettings({ onBack, onNext }) {
         </motion.div>
       </div>
 
+      {/* Settings */}
       <div className="space-y-6 md:space-y-8">
+        {/* Bank Template */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base md:text-lg">
@@ -193,6 +198,7 @@ export default function ConfigureSettings({ onBack, onNext }) {
           </CardContent>
         </Card>
 
+        {/* Client Names */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base md:text-lg">
@@ -253,6 +259,7 @@ export default function ConfigureSettings({ onBack, onNext }) {
         </Card>
       </div>
 
+      {/* Actions */}
       <div className="flex flex-col md:flex-row justify-between gap-4 mt-8">
         <Button
           variant="outline"

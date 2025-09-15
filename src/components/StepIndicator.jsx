@@ -1,5 +1,3 @@
-"use client"
-
 import { motion } from "framer-motion"
 import { Upload, Settings, Download, Check } from "lucide-react"
 
