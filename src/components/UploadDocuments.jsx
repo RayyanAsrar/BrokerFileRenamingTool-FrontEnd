@@ -1,11 +1,12 @@
 import { useState, useCallback } from "react"
 import { useDropzone } from "react-dropzone"
 import { motion, AnimatePresence } from "framer-motion"
-import { Upload, X, FileText, ImageIcon, File } from "lucide-react"
+import { Upload, X, FileText, ImageIcon, File, FileTextIcon, ImagesIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import StepIndicator from "./StepIndicator"
-
+import Header from "./Header"
+import { v4 as uuidv4 } from "uuid";
 const acceptedFileTypes = {
   "application/pdf": [".pdf"],
   "image/jpeg": [".jpg", ".jpeg"],
@@ -19,7 +20,8 @@ export default function UploadDocuments({ onFilesUploaded, onNext, uploadedFiles
   const onDrop = useCallback(
     (acceptedFiles) => {
       const newFiles = acceptedFiles.map((file) => ({
-        id: Math.random().toString(36).substr(2, 9),
+        // id: Math.random().toString(36).substr(2, 9),
+        id: uuidv4(), //installed "npm install uuid"
         file,
         name: file.name,
         size: file.size,
@@ -54,12 +56,14 @@ export default function UploadDocuments({ onFilesUploaded, onNext, uploadedFiles
   }
 
   const getFileIcon = (type) => {
-    if (type === "application/pdf") return FileText
-    if (type.startsWith("image/")) return ImageIcon
+    if (type === "application/pdf") return FileTextIcon
+    if (type.startsWith("image/")) return ImagesIcon
     return File
   }
 
   return (
+  <>
+      <Header />
     <div className="max-w-4xl mx-auto">
       <StepIndicator currentStep={1} />
 
@@ -123,7 +127,7 @@ export default function UploadDocuments({ onFilesUploaded, onNext, uploadedFiles
             }`}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-          >
+            >
             <input {...getInputProps()} />
             <Upload
               className={`h-8 w-8 md:h-12 md:w-12 mx-auto mb-4 ${
@@ -181,7 +185,7 @@ export default function UploadDocuments({ onFilesUploaded, onNext, uploadedFiles
                           size="sm"
                           onClick={() => removeFile(fileItem.id)}
                           className="text-destructive hover:text-destructive hover:bg-destructive/10 flex-shrink-0 ml-2"
-                        >
+                          >
                           <X className="h-4 w-4" />
                         </Button>
                       </motion.div>
@@ -205,5 +209,6 @@ export default function UploadDocuments({ onFilesUploaded, onNext, uploadedFiles
         </Button>
       </div>
     </div>
+          </>
   )
 }

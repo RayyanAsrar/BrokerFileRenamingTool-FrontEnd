@@ -17,23 +17,50 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/useToast"
 import StepIndicator from "./StepIndicator"
+import Header from "./Header"
 
-export default function ReviewDownload({ processedData, onBack, onNewBatch }) {
+
+export default function ReviewDownload({ processedData, onBack, onNewBatch, onDataUpdate }) {
   const [editingIndex, setEditingIndex] = useState(null)
   const [editedNames, setEditedNames] = useState({})
+  // FIXED: Add local state to track the actual processed data
+  const [localProcessedData, setLocalProcessedData] = useState(processedData || [])
   const { toast } = useToast()
 
   const handleEdit = (index) => {
     setEditingIndex(index)
     setEditedNames({
       ...editedNames,
-      [index]: editedNames[index] || processedData[index].suggestedName,
+      [index]: editedNames[index] || localProcessedData[index].suggestedName,
     })
   }
 
+  // FIXED: Actually update the processed data when saving edits
   const handleSaveEdit = (index) => {
+    const newSuggestedName = editedNames[index]
+    
+    if (newSuggestedName && newSuggestedName.trim()) {
+      // Update local processed data
+      const updatedData = [...localProcessedData]
+      updatedData[index] = {
+        ...updatedData[index],
+        suggestedName: newSuggestedName.trim()
+      }
+      setLocalProcessedData(updatedData)
+      
+      // If parent component wants to track changes, call the callback
+      if (onDataUpdate) {
+        onDataUpdate(updatedData)
+      }
+      
+      // Show success message
+      toast({
+        title: "Filename Updated",
+        description: `Successfully updated filename for ${updatedData[index].originalName}`,
+      })
+    }
+    
     setEditingIndex(null)
-    // In a real app, this would update the processed data
   }
 
   const handleCancelEdit = (index) => {
@@ -69,11 +96,11 @@ export default function ReviewDownload({ processedData, onBack, onNewBatch }) {
   }
 
   const getStatusSummary = () => {
-    const high = processedData.filter((item) => item.confidence >= 90).length
-    const medium = processedData.filter((item) => item.confidence >= 75 && item.confidence < 90).length
-    const low = processedData.filter((item) => item.confidence < 75).length
+    const high = localProcessedData.filter((item) => item.confidence >= 90).length
+    const medium = localProcessedData.filter((item) => item.confidence >= 75 && item.confidence < 90).length
+    const low = localProcessedData.filter((item) => item.confidence < 75).length
 
-    return { high, medium, low, total: processedData.length }
+    return { high, medium, low, total: localProcessedData.length }
   }
 
   const handleBulkAccept = () => {
@@ -102,6 +129,8 @@ export default function ReviewDownload({ processedData, onBack, onNewBatch }) {
   const status = getStatusSummary()
 
   return (
+    <>
+  <Header />
     <div className="max-w-6xl mx-auto">
       <StepIndicator currentStep={3} />
 
@@ -182,7 +211,7 @@ export default function ReviewDownload({ processedData, onBack, onNewBatch }) {
                 </tr>
               </thead>
               <tbody>
-                {processedData.map((item, index) => (
+                {localProcessedData.map((item, index) => (
                   <motion.tr
                     key={index}
                     initial={{ opacity: 0, y: 20 }}
@@ -237,9 +266,9 @@ export default function ReviewDownload({ processedData, onBack, onNewBatch }) {
                     <td className="p-3">
                       {editingIndex !== index && (
                         <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => handleEdit(index)}
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleEdit(index)}
                           className="hover:scale-105 transition-transform"
                         >
                           <Edit3 className="h-3 w-3" />
@@ -253,9 +282,9 @@ export default function ReviewDownload({ processedData, onBack, onNewBatch }) {
           </div>
 
           <div className="md:hidden space-y-4">
-            {processedData.map((item, index) => (
+            {localProcessedData.map((item, index) => (
               <motion.div
-                key={index}
+              key={index}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
@@ -343,7 +372,7 @@ export default function ReviewDownload({ processedData, onBack, onNewBatch }) {
               onClick={handleExportReview}
               variant="outline"
               className="w-full md:w-auto hover:scale-105 transition-transform bg-transparent"
-            >
+              >
               Export Review
             </Button>
           </div>
@@ -371,5 +400,6 @@ export default function ReviewDownload({ processedData, onBack, onNewBatch }) {
         </Button>
       </div>
     </div>
+          </>
   )
 }

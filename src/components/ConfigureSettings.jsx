@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import StepIndicator from "./StepIndicator"
+import Header from "./Header"
 
 const bankTemplates = {
   anz: {
@@ -42,7 +43,8 @@ const availableTokens = [
   { token: "{Ref}", description: "Loan/application reference ID" },
 ]
 
-export default function ConfigureSettings({ onBack, onNext }) {
+// FIXED: Added default props for onNext to handle missing callback data
+export default function ConfigureSettings({ onBack, onNext = () => {} }) {
   const [selectedBank, setSelectedBank] = useState("")
   const [clientNames, setClientNames] = useState([])
   const [newClientName, setNewClientName] = useState("")
@@ -66,14 +68,23 @@ export default function ConfigureSettings({ onBack, onNext }) {
 
   const canProceed = selectedBank && clientNames.length > 0
 
+  // FIXED: Enhanced handleNext to pass proper data structure
   const handleNext = () => {
     if (canProceed) {
-      onNext(selectedBank, clientNames)
+      const configurationData = {
+        selectedBank,
+        bankTemplate: bankTemplates[selectedBank],
+        clientNames,
+        timestamp: new Date().toISOString()
+      }
+      onNext(configurationData)
     }
   }
 
   return (
+    <>
     <div className="max-w-4xl mx-auto">
+    <Header/>
       <StepIndicator currentStep={2} />
 
       {/* Intro */}
@@ -163,17 +174,19 @@ export default function ConfigureSettings({ onBack, onNext }) {
 
             {selectedBank && (
               <motion.div
-                initial={{ opacity: 0, height: 0 }}
+              initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 transition={{ duration: 0.3 }}
                 className="space-y-4"
               >
                 <div>
                   <Label className="text-sm md:text-base font-medium">Template Preview</Label>
+                  {/* FIXED: Removed distracting continuous pulse animation */}
                   <motion.div
                     className="mt-2 p-3 md:p-4 bg-muted rounded-lg font-mono text-xs md:text-sm break-all"
-                    animate={{ scale: [1, 1.02, 1] }}
-                    transition={{ duration: 0.5 }}
+                    initial={{ scale: 0.95, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.3 }}
                   >
                     {bankTemplates[selectedBank].template}
                   </motion.div>
@@ -191,7 +204,7 @@ export default function ConfigureSettings({ onBack, onNext }) {
                       </Badge>
                     ))}
                   </div>
-                  <p className="text-xs text-muted-foreground mt-2">Tap tokens to see their descriptions</p>
+                  <p className="text-xs text-muted-foreground mt-2">Hover over tokens to see their descriptions</p>
                 </div>
               </motion.div>
             )}
@@ -281,5 +294,6 @@ export default function ConfigureSettings({ onBack, onNext }) {
         </Button>
       </div>
     </div>
+          </>
   )
-}
+}   
