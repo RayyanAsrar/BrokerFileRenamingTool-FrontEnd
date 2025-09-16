@@ -1,9 +1,9 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import UploadDocuments from "../components/UploadDocuments"
-import ConfigureSettings from "../components/ConfigureSettings"
-import ReviewDownload from "../components/ReviewDownload"
-import AnimatedBackground from "../components/AnimatedBackground"
+import UploadDocuments from "./UploadDocuments"
+import ConfigureSettings from "./ConfigureSettings"
+import ReviewDownload from "./ReviewDownload"
+import AnimatedBackground from "../components/shared/AnimatedBackground"
 
 export default function Home() {
   const [currentStep, setCurrentStep] = useState(1)

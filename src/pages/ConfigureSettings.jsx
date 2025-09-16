@@ -7,42 +7,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import StepIndicator from "./shared/StepIndicator"
+import StepIndicator from "../components/shared/StepIndicator"
 import PageLayout from "../layout/PageLayout"
+import { bankTemplates, availableTokens } from "../lib/constants"
 // import Header from "./Header"
 
-const bankTemplates = {
-  anz: {
-    name: "ANZ",
-    template: "{Client}_{DocType}_{Issuer}_{Date}.pdf",
-    example: "JohnSmith_Payslip_ABCMining_Jan2025.pdf",
-  },
-  commonwealth: {
-    name: "Commonwealth Bank",
-    template: "{Client}_{DocType}_{Period}_{Issuer}.pdf",
-    example: "JohnSmith_BankStatement_2024-11_to_2024-12_CBA.pdf",
-  },
-  westpac: {
-    name: "Westpac",
-    template: "{Client}_{CoApplicant}_{DocType}_{Period}.pdf",
-    example: "JohnSmith_AishaKhan_BankStatement_2024-11_to_2024-12.pdf",
-  },
-  nab: {
-    name: "NAB",
-    template: "{Client}_{DocType}_{Date}_{Ref}.pdf",
-    example: "JohnSmith_Payslip_2025-01_App123.pdf",
-  },
-}
 
-const availableTokens = [
-  { token: "{Client}", description: "Main applicant name" },
-  { token: "{CoApplicant}", description: "Secondary applicant name" },
-  { token: "{DocType}", description: "Document type (Payslip, BankStatement, ID, TaxReturn)" },
-  { token: "{Issuer}", description: "Bank, employer, or ID authority" },
-  { token: "{Date}", description: "Month-Year (e.g., Jan2025)" },
-  { token: "{Period}", description: "Date range (2024-11_to_2024-12)" },
-  { token: "{Ref}", description: "Loan/application reference ID" },
-]
 
 // FIXED: Added default props for onNext to handle missing callback data
 export default function ConfigureSettings({ onBack, onNext = () => {} }) {

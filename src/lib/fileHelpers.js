@@ -19,4 +19,4 @@ export const acceptedFileTypes = {
   "image/jpeg": [".jpg", ".jpeg"],
   "image/png": [".png"],
   "image/heic": [".heic"],
-}
+} 
