@@ -1,10 +1,9 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import Header from "@/components/Header"
-import UploadDocuments from "@/components/UploadDocuments"
-import ConfigureSettings from "@/components/ConfigureSettings"
-import ReviewDownload from "@/components/ReviewDownload"
-import AnimatedBackground from "@/components/AnimatedBackground"
+import UploadDocuments from "../components/UploadDocuments"
+import ConfigureSettings from "../components/ConfigureSettings"
+import ReviewDownload from "../components/ReviewDownload"
+import AnimatedBackground from "../components/AnimatedBackground"
 
 export default function Home() {
   const [currentStep, setCurrentStep] = useState(1)
@@ -47,8 +46,6 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background relative">
       <AnimatedBackground />
-      <Header />
-
       <main className="container mx-auto px-4 py-8 relative z-10">
         <AnimatePresence mode="wait">
           {currentStep === 1 && (

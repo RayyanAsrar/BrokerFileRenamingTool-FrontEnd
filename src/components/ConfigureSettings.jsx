@@ -7,7 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import StepIndicator from "./StepIndicator"
+import StepIndicator from "./shared/StepIndicator"
+import PageLayout from "../layout/PageLayout"
 // import Header from "./Header"
 
 const bankTemplates = {
@@ -83,65 +84,7 @@ export default function ConfigureSettings({ onBack, onNext = () => {} }) {
 
   return (
     <>
-    {/* <Header/> */}
-    <div className="max-w-4xl mx-auto">
-      <StepIndicator currentStep={2} />
-
-      {/* Intro */}
-      <div className="text-center mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">Automate Your Document Processing</h2>
-        <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
-          Save hours of manual work by automatically renaming client documents according to bank-specific templates.
-          Upload, process, and download organized files in minutes.
-        </p>
-      </div>
-
-      {/* Progress icons */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-        {/* Upload step */}
-        <motion.div
-          className="text-center opacity-50"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 0.5, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-            <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2, repeat: Infinity }}>
-              ✓
-            </motion.div>
-          </div>
-          <h3 className="font-semibold text-muted-foreground mb-2">Upload Documents</h3>
-          <p className="text-sm text-muted-foreground">Files uploaded successfully</p>
-        </motion.div>
-
-        {/* Configure step */}
-        <motion.div
-          className="text-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-            <Building2 className="h-8 w-8 text-primary-foreground" />
-          </div>
-          <h3 className="font-semibold text-foreground mb-2">Configure Settings</h3>
-          <p className="text-sm text-muted-foreground">Select bank template and enter client information</p>
-        </motion.div>
-
-        {/* Review step */}
-        <motion.div
-          className="text-center opacity-50"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 0.5, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-            <motion.div className="h-8 w-8 text-muted-foreground">⏳</motion.div>
-          </div>
-          <h3 className="font-semibold text-muted-foreground mb-2">Review & Download</h3>
-          <p className="text-sm text-muted-foreground">Review suggested names and download organized files</p>
-        </motion.div>
-      </div>
+    <PageLayout currentStep={2}>
 
       {/* Settings */}
       <div className="space-y-6 md:space-y-8">
@@ -293,7 +236,8 @@ export default function ConfigureSettings({ onBack, onNext = () => {} }) {
           Process Files
         </Button>
       </div>
-    </div>
+   
+    </PageLayout>
           </>
   )
 }   

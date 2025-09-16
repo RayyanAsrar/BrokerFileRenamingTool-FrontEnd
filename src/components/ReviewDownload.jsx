@@ -16,7 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/useToast"
-import StepIndicator from "./StepIndicator"
+import StepIndicator from "./shared/StepIndicator"
 // import Header from "./Header"
 
 
