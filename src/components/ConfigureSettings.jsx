@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import StepIndicator from "./StepIndicator"
-import Header from "./Header"
+// import Header from "./Header"
 
 const bankTemplates = {
   anz: {
@@ -83,8 +83,8 @@ export default function ConfigureSettings({ onBack, onNext = () => {} }) {
 
   return (
     <>
+    {/* <Header/> */}
     <div className="max-w-4xl mx-auto">
-    <Header/>
       <StepIndicator currentStep={2} />
 
       {/* Intro */}

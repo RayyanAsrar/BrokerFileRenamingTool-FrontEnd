@@ -5,7 +5,7 @@ import { Upload, X, FileText, ImageIcon, File, FileTextIcon, ImagesIcon } from "
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import StepIndicator from "./StepIndicator"
-import Header from "./Header"
+// import Header from "./Header"
 import { v4 as uuidv4 } from "uuid";
 const acceptedFileTypes = {
   "application/pdf": [".pdf"],
@@ -63,7 +63,7 @@ export default function UploadDocuments({ onFilesUploaded, onNext, uploadedFiles
 
   return (
   <>
-      <Header />
+      {/* <Header /> */}
     <div className="max-w-4xl mx-auto">
       <StepIndicator currentStep={1} />
 
@@ -205,7 +205,7 @@ export default function UploadDocuments({ onFilesUploaded, onNext, uploadedFiles
           className="w-full md:w-auto px-8 py-3 text-lg hover:scale-105 transition-transform"
           size="lg"
         >
-          Configure Settings
+          Next
         </Button>
       </div>
     </div>

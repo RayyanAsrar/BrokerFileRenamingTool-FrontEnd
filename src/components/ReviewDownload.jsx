@@ -17,7 +17,7 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/useToast"
 import StepIndicator from "./StepIndicator"
-import Header from "./Header"
+// import Header from "./Header"
 
 
 export default function ReviewDownload({ processedData, onBack, onNewBatch, onDataUpdate }) {
@@ -130,7 +130,7 @@ export default function ReviewDownload({ processedData, onBack, onNewBatch, onDa
 
   return (
     <>
-  <Header />
+  {/* <Header /> */}
     <div className="max-w-6xl mx-auto">
       <StepIndicator currentStep={3} />
 
