@@ -24,7 +24,7 @@ const DocumentTable = ({
             <th className="text-left p-3 font-medium text-foreground">Date</th>
             <th className="text-left p-3 font-medium text-foreground">Suggested Name</th>
             <th className="text-left p-3 font-medium text-foreground">Confidence</th>
-            <th className="text-left p-3 font-medium text-foreground">Actions</th>
+            {/* <th className="text-left p-3 font-medium text-foreground">Actions</th> */}
           </tr>
         </thead>
         <tbody>
@@ -62,9 +62,9 @@ const DocumentTable = ({
               <td className="p-3">
                 <ConfidenceBadge confidence={item.confidence} />
               </td>
-              <td className="p-3">
-                {/* Actions column - EditableFileName handles this internally now */}
-              </td>
+                <td className="p-3">
+                  {/* Actions column - EditableFileName handles this internally now */}
+                </td>
             </motion.tr>
           ))}
         </tbody>
