@@ -1,7 +1,16 @@
-import { AlertTriangle, CheckCircle2 } from "lucide-react"
+import { AlertTriangle, CheckCircle2, Pencil } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
-const ConfidenceBadge = ({ confidence }) => {
+const ConfidenceBadge = ({ confidence, editedManually }) => {
+  if (editedManually) {
+    return (
+      <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+        {/* <Pencil className="h-3 w-3 mr-1" /> */}
+        Edited Manually
+      </Badge>
+    )
+  }
+
   if (confidence >= 90) {
     return (
       <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">

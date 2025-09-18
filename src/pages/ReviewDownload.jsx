@@ -22,28 +22,29 @@ export default function ReviewDownload({ processedData, onBack, onNewBatch, onDa
   }
 
   const handleSaveEdit = (index) => {
-    const newSuggestedName = editedNames[index]
+  const newSuggestedName = editedNames[index]
+  
+  if (newSuggestedName && newSuggestedName.trim()) {
+    const updatedData = [...localProcessedData]
+    updatedData[index] = {
+      ...updatedData[index],
+      suggestedName: newSuggestedName.trim(),
+      editedManually: true, // 👈 add the flag
+    }
+    setLocalProcessedData(updatedData)
     
-    if (newSuggestedName && newSuggestedName.trim()) {
-      const updatedData = [...localProcessedData]
-      updatedData[index] = {
-        ...updatedData[index],
-        suggestedName: newSuggestedName.trim()
-      }
-      setLocalProcessedData(updatedData)
-      
-      if (onDataUpdate) {
-        onDataUpdate(updatedData)
-      }
-      
-      toast({
-        title: "Filename Updated",
-        description: `Successfully updated filename for ${updatedData[index].originalName}`,
-      })
+    if (onDataUpdate) {
+      onDataUpdate(updatedData)
     }
     
-    setEditingIndex(null)
+    toast({
+      title: "Filename Updated",
+      description: `Successfully updated filename for ${updatedData[index].originalName}`,
+    })
   }
+  
+  setEditingIndex(null)
+}
 
   const handleCancelEdit = (index) => {
     setEditingIndex(null)

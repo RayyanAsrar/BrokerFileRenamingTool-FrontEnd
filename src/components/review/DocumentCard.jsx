@@ -4,15 +4,15 @@ import { Badge } from "@/components/ui/badge"
 import ConfidenceBadge from "./ConfidenceBadge"
 import EditableFileName from "./EditableFileName"
 
-const DocumentCard = ({ 
-  item, 
-  index, 
-  isEditing, 
+const DocumentCard = ({
+  item,
+  index,
+  isEditing,
   filename,
   onEdit,
   onSave,
   onCancel,
-  onFilenameChange 
+  onFilenameChange
 }) => {
   return (
     <motion.div
@@ -30,7 +30,11 @@ const DocumentCard = ({
             {item.originalName}
           </span>
         </div>
-        <ConfidenceBadge confidence={item.confidence} />
+        <ConfidenceBadge
+          confidence={item.confidence}
+          editedManually={item.editedManually}
+        />
+
       </div>
 
       {/* Document details */}

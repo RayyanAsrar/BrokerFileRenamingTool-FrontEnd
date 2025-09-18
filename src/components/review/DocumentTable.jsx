@@ -4,14 +4,14 @@ import { Badge } from "@/components/ui/badge"
 import ConfidenceBadge from "./ConfidenceBadge"
 import EditableFileName from "./EditableFileName"
 
-const DocumentTable = ({ 
-  documents, 
-  editingIndex, 
+const DocumentTable = ({
+  documents,
+  editingIndex,
   editedNames,
   onEdit,
   onSave,
   onCancel,
-  onFilenameChange 
+  onFilenameChange
 }) => {
   return (
     <div className="hidden md:block overflow-x-auto">
@@ -24,7 +24,6 @@ const DocumentTable = ({
             <th className="text-left p-3 font-medium text-foreground">Date</th>
             <th className="text-left p-3 font-medium text-foreground">Suggested Name</th>
             <th className="text-left p-3 font-medium text-foreground">Confidence</th>
-            {/* <th className="text-left p-3 font-medium text-foreground">Actions</th> */}
           </tr>
         </thead>
         <tbody>
@@ -60,11 +59,13 @@ const DocumentTable = ({
                 />
               </td>
               <td className="p-3">
-                <ConfidenceBadge confidence={item.confidence} />
+                <ConfidenceBadge
+                  confidence={item.confidence}
+                  editedManually={item.editedManually}
+                />
+
+
               </td>
-                <td className="p-3">
-                  {/* Actions column - EditableFileName handles this internally now */}
-                </td>
             </motion.tr>
           ))}
         </tbody>

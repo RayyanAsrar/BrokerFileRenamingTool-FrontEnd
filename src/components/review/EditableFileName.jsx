@@ -12,7 +12,7 @@ const EditableFileName = ({
   className = ""
 }) => {
   return (
-    <div className={`${className}`}>
+    <div className={className}>
       {isEditing ? (
         <div className="flex items-center gap-2">
           <Input
