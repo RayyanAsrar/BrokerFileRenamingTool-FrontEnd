@@ -1,12 +1,17 @@
-import "./index.css"
-import { ThemeProvider } from "@/components/theme-provider"
-import { Toaster } from "@/components/ui/toaster"
+import "../index.css"
+import { ThemeProvider } from "../context/ThemeProvider"
+// import { Toaster } from "@/components/ui/toaster"
 
 export default function RootLayout({ children }) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+   <ThemeProvider
+      attribute="class"
+      defaultTheme="dark"
+      storageKey="broker-filer-theme"   // 👈 add this
+      disableTransitionOnChange
+    >
       {children}
-      <Toaster />
+      {/* <Toaster /> */}
     </ThemeProvider>
   )
 }

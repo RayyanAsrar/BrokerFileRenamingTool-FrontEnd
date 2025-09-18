@@ -6,9 +6,12 @@ import "@fontsource/inter/700.css"
 
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
+import RootLayout from './layout/RootLayout.jsx'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
-    <App />
+    <RootLayout>
+      <App />
+    </RootLayout>
   </BrowserRouter>
 )
