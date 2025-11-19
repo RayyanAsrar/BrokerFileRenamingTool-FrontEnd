@@ -66,7 +66,9 @@ const DocumentTable = ({
                 </td>
                 <td className="p-3">
                   <EditableFileName
-                    filename={editedNames[index] || item.newName}
+                    filename={
+                      editedNames[index] || item.newName || item.suggestedName
+                    }
                     isEditing={editingIndex === index}
                     onEdit={() => onEdit(index)}
                     onSave={() => onSave(index)}
@@ -76,7 +78,7 @@ const DocumentTable = ({
                 </td>
                 <td className="p-3">
                   <ConfidenceBadge
-                    confidence={item.confidenceScore}
+                    confidence={item.confidenceScore || item.confidence || 0}
                     editedManually={item.editedManually}
                   />
                 </td>

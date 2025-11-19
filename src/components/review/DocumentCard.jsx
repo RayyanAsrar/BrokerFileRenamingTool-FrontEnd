@@ -1,8 +1,8 @@
-import { motion } from "framer-motion"
-import { FileText } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import ConfidenceBadge from "./ConfidenceBadge"
-import EditableFileName from "./EditableFileName"
+import { motion } from "framer-motion";
+import { FileText } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import ConfidenceBadge from "./ConfidenceBadge";
+import EditableFileName from "./EditableFileName";
 
 const DocumentCard = ({
   item,
@@ -12,7 +12,7 @@ const DocumentCard = ({
   onEdit,
   onSave,
   onCancel,
-  onFilenameChange
+  onFilenameChange,
 }) => {
   return (
     <motion.div
@@ -31,10 +31,9 @@ const DocumentCard = ({
           </span>
         </div>
         <ConfidenceBadge
-          confidence={item.confidence}
+          confidence={item.confidenceScore || item.confidence || 0}
           editedManually={item.editedManually}
         />
-
       </div>
 
       {/* Document details */}
@@ -42,16 +41,18 @@ const DocumentCard = ({
         <div>
           <span className="text-muted-foreground">Type:</span>
           <Badge variant="outline" className="ml-1 text-xs">
-            {item.docType}
+            {item.docType || "Unknown"}
           </Badge>
         </div>
         <div>
           <span className="text-muted-foreground">Date:</span>
-          <span className="ml-1 text-foreground">{item.date}</span>
+          <span className="ml-1 text-foreground">{item.date || "Unknown"}</span>
         </div>
         <div className="col-span-2">
           <span className="text-muted-foreground">Issuer:</span>
-          <span className="ml-1 text-foreground">{item.issuer}</span>
+          <span className="ml-1 text-foreground">
+            {item.issuer || "Unknown"}
+          </span>
         </div>
       </div>
 
@@ -71,7 +72,7 @@ const DocumentCard = ({
         </div>
       </div>
     </motion.div>
-  )
-}
+  );
+};
 
-export default DocumentCard
+export default DocumentCard;

@@ -1,98 +1,116 @@
-import { useState } from "react"
-import { ArrowLeft, Download, FileText } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { useToast } from "@/hooks/useToast"
-import PageLayout from "../layout/PageLayout"
-import ActionButton from "../components/shared/ActionButton"
-import DocumentTable from "../components/review/DocumentTable"
-import DocumentCard from "../components/review/DocumentCard"
+import { useState } from "react";
+import { ArrowLeft, Download, FileText } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/hooks/useToast";
+import PageLayout from "../layout/PageLayout";
+import ActionButton from "../components/shared/ActionButton";
+import DocumentTable from "../components/review/DocumentTable";
+import DocumentCard from "../components/review/DocumentCard";
 
-export default function ReviewDownload({ processedData, onBack, onNewBatch, onDataUpdate }) {
-  console.log("Processed Data in ReviewDownload:", processedData)
-  const [editingIndex, setEditingIndex] = useState(null)
-  const [editedNames, setEditedNames] = useState({})
-  const [localProcessedData, setLocalProcessedData] = useState(processedData || [])
-  const { toast } = useToast()
+export default function ReviewDownload({
+  processedData,
+  onBack,
+  onNewBatch,
+  onDataUpdate,
+}) {
+  console.log("Processed Data in ReviewDownload:", processedData);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editedNames, setEditedNames] = useState({});
+  const [localProcessedData, setLocalProcessedData] = useState(
+    processedData || []
+  );
+  const { toast } = useToast();
 
   const handleEdit = (index) => {
-    setEditingIndex(index)
+    setEditingIndex(index);
     setEditedNames({
       ...editedNames,
-      [index]: editedNames[index] || localProcessedData[index].suggestedName,
-    })
-  }
+      [index]:
+        editedNames[index] ||
+        localProcessedData[index].newName ||
+        localProcessedData[index].suggestedName,
+    });
+  };
 
   const handleSaveEdit = (index) => {
-  const newSuggestedName = editedNames[index]
-  
-  if (newSuggestedName && newSuggestedName.trim()) {
-    const updatedData = [...localProcessedData]
-    updatedData[index] = {
-      ...updatedData[index],
-      suggestedName: newSuggestedName.trim(),
-      editedManually: true, // 👈 add the flag
+    const newSuggestedName = editedNames[index];
+
+    if (newSuggestedName && newSuggestedName.trim()) {
+      const updatedData = [...localProcessedData];
+      updatedData[index] = {
+        ...updatedData[index],
+        newName: newSuggestedName.trim(),
+        suggestedName: newSuggestedName.trim(),
+        editedManually: true,
+      };
+      setLocalProcessedData(updatedData);
+
+      if (onDataUpdate) {
+        onDataUpdate(updatedData);
+      }
+
+      toast({
+        title: "Filename Updated",
+        description: `Successfully updated filename for ${updatedData[index].originalName}`,
+      });
     }
-    setLocalProcessedData(updatedData)
-    
-    if (onDataUpdate) {
-      onDataUpdate(updatedData)
-    }
-    
-    toast({
-      title: "Filename Updated",
-      description: `Successfully updated filename for ${updatedData[index].originalName}`,
-    })
-  }
-  
-  setEditingIndex(null)
-}
+
+    setEditingIndex(null);
+  };
 
   const handleCancelEdit = (index) => {
-    setEditingIndex(null)
-    const newEditedNames = { ...editedNames }
-    delete newEditedNames[index]
-    setEditedNames(newEditedNames)
-  }
+    setEditingIndex(null);
+    const newEditedNames = { ...editedNames };
+    delete newEditedNames[index];
+    setEditedNames(newEditedNames);
+  };
 
   const handleFilenameChange = (index, value) => {
     setEditedNames({
       ...editedNames,
       [index]: value,
-    })
-  }
+    });
+  };
 
   const getStatusSummary = () => {
-    const high = localProcessedData.filter((item) => item.confidence >= 90).length
-    const medium = localProcessedData.filter((item) => item.confidence >= 75 && item.confidence < 90).length
-    const low = localProcessedData.filter((item) => item.confidence < 75).length
-    return { high, medium, low, total: localProcessedData.length }
-  }
+    const high = localProcessedData.filter(
+      (item) => (item.confidenceScore || item.confidence || 0) >= 0.9
+    ).length;
+    const medium = localProcessedData.filter((item) => {
+      const conf = item.confidenceScore || item.confidence || 0;
+      return conf >= 0.75 && conf < 0.9;
+    }).length;
+    const low = localProcessedData.filter(
+      (item) => (item.confidenceScore || item.confidence || 0) < 0.75
+    ).length;
+    return { high, medium, low, total: localProcessedData.length };
+  };
 
   const handleBulkAccept = () => {
     toast({
       title: "Files Accepted",
       description: "All files have been accepted with current names.",
-    })
-  }
+    });
+  };
 
   const handleExportReview = () => {
     toast({
-      title: "Export Started", 
+      title: "Export Started",
       description: "Review data is being exported to CSV.",
-    })
-  }
+    });
+  };
 
   const handleDownloadZip = () => {
     toast({
       title: "Download Started",
       description: "Your renamed files are being prepared for download.",
-    })
-  }
+    });
+  };
 
-  const status = getStatusSummary()
+  const status = getStatusSummary();
 
   return (
-    <PageLayout 
+    <PageLayout
       currentStep={3}
       title="Document Preview & Review"
       description="Review extracted metadata and edit suggestions before download."
@@ -104,7 +122,7 @@ export default function ReviewDownload({ processedData, onBack, onNewBatch, onDa
             <FileText className="h-5 w-5 text-primary" />
             Document Preview & Review
           </CardTitle>
-          <ActionButton 
+          <ActionButton
             onClick={handleDownloadZip}
             icon={<Download className="h-4 w-4" />}
             className="w-full md:w-auto hover:scale-105 transition-transform"
@@ -112,12 +130,13 @@ export default function ReviewDownload({ processedData, onBack, onNewBatch, onDa
             Download ZIP
           </ActionButton>
         </CardHeader>
-        
+
         <CardContent>
           {/* Status Summary */}
           <div className="mb-4 p-4 bg-muted rounded-lg">
             <p className="text-xs md:text-sm text-muted-foreground">
-              Showing {status.total} documents • {status.high} High confidence • {status.medium} Medium • {status.low} need review
+              Showing {status.total} documents • {status.high} High confidence •{" "}
+              {status.medium} Medium • {status.low} need review
             </p>
           </div>
 
@@ -151,16 +170,10 @@ export default function ReviewDownload({ processedData, onBack, onNewBatch, onDa
 
           {/* Bulk Actions */}
           <div className="flex flex-col md:flex-row gap-4 mt-6 pt-4 border-t border-border">
-            <ActionButton
-              onClick={handleBulkAccept}
-              variant="outline"
-            >
+            <ActionButton onClick={handleBulkAccept} variant="outline">
               Bulk Accept All
             </ActionButton>
-            <ActionButton
-              onClick={handleExportReview}
-              variant="outline"
-            >
+            <ActionButton onClick={handleExportReview} variant="outline">
               Export Review
             </ActionButton>
           </div>
@@ -177,13 +190,10 @@ export default function ReviewDownload({ processedData, onBack, onNewBatch, onDa
           Back to Settings
         </ActionButton>
 
-        <ActionButton
-          onClick={onNewBatch}
-          variant="outline"
-        >
+        <ActionButton onClick={onNewBatch} variant="outline">
           Process New Batch
         </ActionButton>
       </div>
     </PageLayout>
-  )
+  );
 }
