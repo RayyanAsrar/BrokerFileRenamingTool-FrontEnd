@@ -8,6 +8,7 @@ import DocumentTable from "../components/review/DocumentTable"
 import DocumentCard from "../components/review/DocumentCard"
 
 export default function ReviewDownload({ processedData, onBack, onNewBatch, onDataUpdate }) {
+  console.log("Processed Data in ReviewDownload:", processedData)
   const [editingIndex, setEditingIndex] = useState(null)
   const [editedNames, setEditedNames] = useState({})
   const [localProcessedData, setLocalProcessedData] = useState(processedData || [])
