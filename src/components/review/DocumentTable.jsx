@@ -56,7 +56,7 @@ const DocumentTable = ({
                   </div>
                 </td>
                 <td className="p-3">
-                  <Badge variant="outline">{item.docType || "Unknown"}</Badge>
+                  <Badge variant="outline">{item.docType.toUpperCase() || "Unknown"}</Badge>
                 </td>
                 <td className="p-3 text-sm text-foreground">
                   {item.issuer || "Unknown"}

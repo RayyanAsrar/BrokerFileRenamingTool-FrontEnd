@@ -41,7 +41,7 @@ const DocumentCard = ({
         <div>
           <span className="text-muted-foreground">Type:</span>
           <Badge variant="outline" className="ml-1 text-xs">
-            {item.docType || "Unknown"}
+            {item.docType.toUpperCase() || "Unknown"}
           </Badge>
         </div>
         <div>

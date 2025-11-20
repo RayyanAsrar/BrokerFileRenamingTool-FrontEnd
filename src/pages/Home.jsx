@@ -21,7 +21,9 @@ export default function Home() {
 
     const formData = new FormData();
 
-    formData.append("template", configData.bankTemplate);
+    console.log("Configuration Data:", configData);
+
+    formData.append("template", configData.bankTemplate.template);
     formData.append("clientName", configData.clientNames[0] || "Unknown");
     for (let i = 0; i < uploadedFiles.length; i++) {
       formData.append("files", uploadedFiles[i]);
@@ -49,29 +51,7 @@ export default function Home() {
     setCurrentStep(3);
   };
 
-  // Enhanced mock data generation
-  const generateMockData = (files, clientName, bankType) => {
-    const docTypes = ["Payslip", "BankStatement", "ID", "TaxReturn"];
-    const issuers = [
-      "ABC Corporation",
-      "Commonwealth Bank",
-      "NSW Government",
-      "Australian Taxation Office",
-    ];
-    const confidenceScores = [95, 87, 72, 91, 84, 78, 92];
-
-    return files.map((file, index) => ({
-      originalName: file.name,
-      docType: docTypes[index % docTypes.length],
-      issuer: issuers[index % issuers.length],
-      date: "2024-11",
-      suggestedName: `${clientName.replace(/\s+/g, "")}_${
-        docTypes[index % docTypes.length]
-      }_${issuers[index % issuers.length].replace(/\s+/g, "")}_2024-11.pdf`,
-      confidence: confidenceScores[index % confidenceScores.length],
-      file: file,
-    }));
-  };
+ 
 
   const handleNewBatch = () => {
     setCurrentStep(1);
