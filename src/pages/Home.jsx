@@ -4,54 +4,79 @@ import UploadDocuments from "@/pages/UploadDocuments";
 import ConfigureSettings from "@/pages/ConfigureSettings";
 import ReviewDownload from "@/pages/ReviewDownload";
 import AnimatedBackground from "../components/shared/AnimatedBackground";
+import LoadingOverlay from "../components/shared/LoadingOverlay";
+import { useToast } from "@/hooks/useToast";
 
 export default function Home() {
   const [currentStep, setCurrentStep] = useState(1);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [configurationData, setConfigurationData] = useState(null);
   const [processedData, setProcessedData] = useState([]);
+  
+  // ✅ Loading state
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
+  const { toast } = useToast();
 
   const handleFilesUploaded = (files) => {
     setUploadedFiles(files);
   };
 
-  // FIXED: Handle single configuration object parameter
   const handleConfigurationComplete = async (configData) => {
     setConfigurationData(configData);
 
     const formData = new FormData();
-
-    // console.log("Configuration Data:", configData);
-
     formData.append("template", configData.bankTemplate.template);
     formData.append("clientName", configData.clientNames[0] || "Unknown");
+    
     for (let i = 0; i < uploadedFiles.length; i++) {
       formData.append("files", uploadedFiles[i]);
     }
     formData.append("totalFiles", uploadedFiles.length);
 
+    // ✅ Start loading
+    setIsLoading(true);
+    setLoadingMessage(`Processing ${uploadedFiles.length} file(s)...`);
+
     try {
-      const response = await fetch("https://broker-file-renaming-tool-back-end.vercel.app/api/upload/", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "https://broker-file-renaming-tool-back-end.vercel.app/api/upload/",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error(`Server error: ${response.status}`);
       }
 
       const result = await response.json();
-      // console.log("Server response:", result);
-
+      
+      // ✅ Success
       setProcessedData(result.data);
+      setCurrentStep(3);
+      
+      toast({
+        title: "Success!",
+        description: `Successfully processed ${result.data.length} documents`,
+      });
+      
     } catch (error) {
       console.error("Error during configuration completion:", error);
+      
+      // ✅ Show error to user
+      toast({
+        title: "Processing Failed",
+        description: error.message || "Failed to process files. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      // ✅ Stop loading
+      setIsLoading(false);
+      setLoadingMessage("");
     }
-
-    setCurrentStep(3);
   };
-
- 
 
   const handleNewBatch = () => {
     setCurrentStep(1);
@@ -67,6 +92,12 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background relative">
       <AnimatedBackground />
+
+      {/* ✅ Loading Overlay */}
+      <LoadingOverlay 
+        isLoading={isLoading} 
+        message={loadingMessage}
+      />
 
       <main className="relative z-10">
         <AnimatePresence mode="wait">
@@ -97,7 +128,7 @@ export default function Home() {
               <ConfigureSettings
                 onBack={() => handleBackToStep(1)}
                 onNext={handleConfigurationComplete}
-                initialData={configurationData} // Pass back data if user returns
+                initialData={configurationData}
               />
             </motion.div>
           )}

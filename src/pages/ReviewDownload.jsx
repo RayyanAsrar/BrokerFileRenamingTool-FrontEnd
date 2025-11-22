@@ -169,9 +169,6 @@ export default function ReviewDownload({
   return (
     <PageLayout
       currentStep={3}
-      title="Document Preview & Review"
-      description="Review extracted metadata and edit suggestions before download."
-      maxWidth="6xl"
     >
       <Card className="mb-6">
         <CardHeader className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0">
