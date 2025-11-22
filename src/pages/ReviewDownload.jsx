@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { ArrowLeft, Download, FileText } from "lucide-react";
+import { ArrowLeft, FileText } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/useToast";
 import PageLayout from "../layout/PageLayout";
 import ActionButton from "../components/shared/ActionButton";
 import DocumentTable from "../components/review/DocumentTable";
 import DocumentCard from "../components/review/DocumentCard";
+import DownloadConfirmationDialog from "../components/review/DownloadConfirmationDialog";
 
 export default function ReviewDownload({
   processedData,
@@ -13,12 +14,12 @@ export default function ReviewDownload({
   onNewBatch,
   onDataUpdate,
 }) {
-  // console.log("Processed Data in ReviewDownload:", processedData);
   const [editingIndex, setEditingIndex] = useState(null);
   const [editedNames, setEditedNames] = useState({});
   const [localProcessedData, setLocalProcessedData] = useState(
     processedData || []
   );
+  const [isDownloading, setIsDownloading] = useState(false);
   const { toast } = useToast();
 
   const handleEdit = (index) => {
@@ -58,9 +59,14 @@ export default function ReviewDownload({
         }
 
         result = await response.json();
-        // console.log("Filename update response:", result);
       } catch (error) {
         console.error("Error updating filename:", error);
+        toast({
+          title: "Update Failed",
+          description: "Failed to update filename. Please try again.",
+          variant: "destructive",
+        });
+        return;
       }
 
       updatedData[index] = {
@@ -109,39 +115,29 @@ export default function ReviewDownload({
     return { high, medium, low, total: localProcessedData.length };
   };
 
-  // const handleBulkAccept = () => {
-  //   toast({
-  //     title: "Files Accepted",
-  //     description: "All files have been accepted with current names.",
-  //   });
-  // };
-
-  // const handleExportReview = () => {
-  //   toast({
-  //     title: "Export Started",
-  //     description: "Review data is being exported to CSV.",
-  //   });
-  // };
-
-  const handleDownloadZip =  async () => {
+  // ✅ This is called after user confirms in the dialog
+  const handleDownloadZip = async () => {
+    setIsDownloading(true);
 
     try {
-      const response = await fetch("https://broker-file-renaming-tool-back-end.vercel.app/api/file/download", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          files: localProcessedData.map((item) => item._id)
-        })
-      });
+      const response = await fetch(
+        "https://broker-file-renaming-tool-back-end.vercel.app/api/file/download",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            files: localProcessedData.map((item) => item._id),
+          }),
+        }
+      );
 
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error(`Download failed: ${response.status}`);
       }
 
-      // Get Data from the incoming Streamed response
-
+      // Download the file
       const blob = await response.blob();
       const url = window.URL.createObjectURL(new Blob([blob]));
       const link = document.createElement("a");
@@ -152,16 +148,25 @@ export default function ReviewDownload({
       link.parentNode.removeChild(link);
       window.URL.revokeObjectURL(url);
 
-     
+      // ✅ Show success message
+      toast({
+        title: "Download Complete",
+        description:
+          "Files have been downloaded and deleted from our servers for your privacy.",
+      });
 
+      // Optional: Redirect to start or show a "Process New Batch" message
+      // You could call onNewBatch() here if you want
     } catch (error) {
       console.error("Error during ZIP download:", error);
+      toast({
+        title: "Download Failed",
+        description: error.message || "Failed to download files. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsDownloading(false);
     }
-
-    toast({
-      title: "Download Started",
-      description: "Your renamed files are being prepared for download.",
-    });
   };
 
   const status = getStatusSummary();
@@ -176,13 +181,13 @@ export default function ReviewDownload({
             <FileText className="h-5 w-5 text-primary" />
             Document Preview & Review
           </CardTitle>
-          <ActionButton
-            onClick={handleDownloadZip}
-            icon={<Download className="h-4 w-4" />}
-            className="w-full md:w-auto hover:scale-105 transition-transform"
-          >
-            Download ZIP
-          </ActionButton>
+
+          {/* ✅ Replace the old button with the confirmation dialog */}
+          <DownloadConfirmationDialog
+            onConfirm={handleDownloadZip}
+            documentCount={localProcessedData.length}
+            isDownloading={isDownloading}
+          />
         </CardHeader>
 
         <CardContent>
@@ -221,16 +226,6 @@ export default function ReviewDownload({
               />
             ))}
           </div>
-
-          {/* Bulk Actions */}
-          {/* <div className="flex flex-col md:flex-row gap-4 mt-6 pt-4 border-t border-border">
-            <ActionButton onClick={handleBulkAccept} variant="outline">
-              Bulk Accept All
-            </ActionButton>
-            <ActionButton onClick={handleExportReview} variant="outline">
-              Export Review
-            </ActionButton>
-          </div> */}
         </CardContent>
       </Card>
 
