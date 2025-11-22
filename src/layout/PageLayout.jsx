@@ -13,7 +13,7 @@ const PageLayout = ({
   maxWidth = "full", // 4xl, 6xl, 7xl, full, etc.
   showHeader = true
 }) => {
-  // ✅ SOLUTION: Map the prop to actual Tailwind classes
+
   const maxWidthClasses = {
     "4xl": "max-w-4xl",
     "5xl": "max-w-5xl",

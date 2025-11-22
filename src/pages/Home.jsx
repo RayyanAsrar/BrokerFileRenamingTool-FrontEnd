@@ -21,7 +21,7 @@ export default function Home() {
 
     const formData = new FormData();
 
-    console.log("Configuration Data:", configData);
+    // console.log("Configuration Data:", configData);
 
     formData.append("template", configData.bankTemplate.template);
     formData.append("clientName", configData.clientNames[0] || "Unknown");
@@ -41,7 +41,7 @@ export default function Home() {
       }
 
       const result = await response.json();
-      console.log("Server response:", result);
+      // console.log("Server response:", result);
 
       setProcessedData(result.data);
     } catch (error) {

@@ -13,7 +13,7 @@ export default function ReviewDownload({
   onNewBatch,
   onDataUpdate,
 }) {
-  console.log("Processed Data in ReviewDownload:", processedData);
+  // console.log("Processed Data in ReviewDownload:", processedData);
   const [editingIndex, setEditingIndex] = useState(null);
   const [editedNames, setEditedNames] = useState({});
   const [localProcessedData, setLocalProcessedData] = useState(
@@ -58,7 +58,7 @@ export default function ReviewDownload({
         }
 
         result = await response.json();
-        console.log("Filename update response:", result);
+        // console.log("Filename update response:", result);
       } catch (error) {
         console.error("Error updating filename:", error);
       }
