@@ -10,14 +10,27 @@ const PageLayout = ({
   title = "Automate Your Document Processing",
   description = "Save hours of manual work by automatically renaming client documents according to bank-specific templates. Upload, process, and download organized files in minutes.",
   showProcessSteps = true,
-  maxWidth = "6xl", // 4xl, 6xl, etc.
+  maxWidth = "full", // 4xl, 6xl, 7xl, full, etc.
   showHeader = true
 }) => {
+
+  const maxWidthClasses = {
+    "4xl": "max-w-4xl",
+    "5xl": "max-w-5xl",
+    "6xl": "max-w-6xl", 
+    "7xl": "max-w-7xl",
+    "8xl": "max-w-8xl",
+    "full": "max-w-full",
+  }
+
+  // Get the correct class or fallback to 6xl
+  const widthClass = maxWidthClasses[maxWidth] || "max-w-6xl"
+
   return (
     <div className="min-h-screen bg-background relative">
       {showHeader && <Header />}
       
-      <main className={`max-w-${maxWidth} mx-auto px-4 py-8`}>
+      <main className={`${widthClass} mx-auto px-4 py-8`}>
         <StepIndicator currentStep={currentStep} />
         
         <PageHeader title={title} description={description} />

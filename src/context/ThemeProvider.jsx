@@ -1,29 +1,8 @@
-// context/ThemeProvider.jsx
-import { createContext, useContext, useEffect, useState } from "react";
+import { ThemeProvider as NextThemesProvider } from "next-themes"
 
-const ThemeContext = createContext();
+export function ThemeProvider({ children, ...props }) {
+  return <NextThemesProvider {...props}>{children}</NextThemesProvider>
+}
 
-export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(() => {
-    // check localStorage on init
-    return localStorage.getItem("theme") || "dark"; // default dark
-  });
-
-  useEffect(() => {
-    localStorage.setItem("theme", theme);
-    document.documentElement.classList.remove("light", "dark");
-    document.documentElement.classList.add(theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
-  };
-
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-};
-
-export const useTheme = () => useContext(ThemeContext);
+// Export the useTheme hook from next-themes for convenience
+export { useTheme } from "next-themes"

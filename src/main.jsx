@@ -8,8 +8,9 @@ import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import RootLayout from './layout/RootLayout.jsx'
 
+
 createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
+    <BrowserRouter>
     <RootLayout>
       <App />
     </RootLayout>
