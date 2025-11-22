@@ -1,18 +1,10 @@
-import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { FileText, Moon, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useTheme } from "@/context/ThemeProvider"
 
 export default function Header() {
-  const [theme, setTheme] = useState("light")
-
-  useEffect(() => {
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark")
-    } else {
-      document.documentElement.classList.remove("dark")
-    }
-  }, [theme])
+  const { theme, setTheme } = useTheme()
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark")
