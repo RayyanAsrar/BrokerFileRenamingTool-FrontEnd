@@ -40,7 +40,7 @@ export default function ReviewDownload({
       let result = null;
       try {
         const response = await fetch(
-          `http://localhost:5000/api/file/${processedData[index]._id}`,
+          `https://broker-file-renaming-tool-back-end.vercel.app/api/file/${processedData[index]._id}`,
           {
             method: "PUT",
             headers: {
@@ -126,7 +126,7 @@ export default function ReviewDownload({
   const handleDownloadZip =  async () => {
 
     try {
-      const response = await fetch("http://localhost:5000/api/file/download", {
+      const response = await fetch("https://broker-file-renaming-tool-back-end.vercel.app/api/file/download", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

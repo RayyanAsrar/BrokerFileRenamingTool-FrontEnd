@@ -31,7 +31,7 @@ export default function Home() {
     formData.append("totalFiles", uploadedFiles.length);
 
     try {
-      const response = await fetch("http://localhost:5000/api/upload/", {
+      const response = await fetch("https://broker-file-renaming-tool-back-end.vercel.app/api/upload/", {
         method: "POST",
         body: formData,
       });
